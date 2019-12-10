@@ -21,7 +21,8 @@ public class PollService {
     }
 
     public List<Poll> getAllPoll() {
-        return pollRepository.findAll();
+        final List<Poll> all = pollRepository.findAll();
+        return all;
     }
 
     public Poll getPollById(long id) {

@@ -22,7 +22,8 @@ public class PollQuestionController {
 
     @GetMapping
     @Produces("application/json")
-    public ResponseEntity<List<PollQuestion>> getPoll() {
-        return new ResponseEntity<>(pollQuestionService.getPollQuestionList(), new HttpHeaders(), HttpStatus.OK);
+    public List<PollQuestion> getPoll() {
+        List<PollQuestion> pollQuestions =  pollQuestionService.getPollQuestionList();
+        return pollQuestions;
     }
 }

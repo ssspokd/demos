@@ -19,20 +19,25 @@ public class PollQuestion  implements Serializable {
     private String textPoll;
     @Column(name="pubmissionorder")
     private String pubmissionorder;
-    @Column(name = "idpoll")
-    private Long idpoll;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="poll_id")
+    private Poll poll;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pollQuestion")
-    private Set<Poll> poll;
+    public PollQuestion() {
+    }
 
-    public PollQuestion(String textPoll, String pubmissionorder, Long idpoll, Set<Poll> poll) {
+    public PollQuestion(String textPoll, String pubmissionorder, Poll poll) {
         this.textPoll = textPoll;
         this.pubmissionorder = pubmissionorder;
-        this.idpoll = idpoll;
         this.poll = poll;
     }
 
-    public PollQuestion() {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTextPoll() {
@@ -51,21 +56,11 @@ public class PollQuestion  implements Serializable {
         this.pubmissionorder = pubmissionorder;
     }
 
-    public Long getIdpoll() {
-        return idpoll;
+    public Poll getPoll() {
+        return poll;
     }
 
-    public void setIdpoll(Long idpoll) {
-        this.idpoll = idpoll;
-    }
-
-
-    @Override
-    public String toString() {
-        return "PollQuestion{" +
-                "textPoll='" + textPoll + '\'' +
-                ", pubmissionorder='" + pubmissionorder + '\'' +
-                ", idpoll=" + idpoll +
-                '}';
+    public void setPoll(Poll poll) {
+        this.poll = poll;
     }
 }

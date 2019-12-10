@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 
@@ -24,6 +25,19 @@ public class Poll  implements Serializable {
     private Date stopDate;
     @Column(name = "isActive")
     private boolean isActive;
+    @OneToMany(mappedBy = "poll")
+    private List<PollQuestion> pollQuestions;
+
+    public Poll() {
+    }
+
+    public Poll(String name, Date startDate, Date stopDate, boolean isActive, List<PollQuestion> pollQuestions) {
+        this.name = name;
+        this.startDate = startDate;
+        this.stopDate = stopDate;
+        this.isActive = isActive;
+        this.pollQuestions = pollQuestions;
+    }
 
     public long getId() {
         return id;
@@ -31,29 +45,6 @@ public class Poll  implements Serializable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public PollQuestion getPollQuestion() {
-        return pollQuestion;
-    }
-
-    public void setPollQuestion(PollQuestion pollQuestion) {
-        this.pollQuestion = pollQuestion;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "pollQuestion", nullable = false)
-    private PollQuestion pollQuestion;
-
-    public Poll() {
-    }
-
-    public Poll(String name, Date startDate, Date stopDate, boolean isActive,PollQuestion pollQuestion) {
-        this.name = name;
-        this.startDate = startDate;
-        this.stopDate = stopDate;
-        this.isActive = isActive;
-        this.pollQuestion = pollQuestion;
     }
 
     public String getName() {
@@ -86,5 +77,13 @@ public class Poll  implements Serializable {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public List<PollQuestion> getPollQuestions() {
+        return pollQuestions;
+    }
+
+    public void setPollQuestions(List<PollQuestion> pollQuestions) {
+        this.pollQuestions = pollQuestions;
     }
 }
