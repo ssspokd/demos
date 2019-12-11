@@ -22,11 +22,12 @@ public class PollController {
 
     @Autowired
     private PollService pollService;
+    private int page = 1;
+    private int size = 10;
 
     @GetMapping(produces = { "application/hal+json" })
     public  ResponseEntity<List<Poll>> getPoll() {
-        ResponseEntity<List<Poll>> entity = new ResponseEntity<>(pollService.getAllPoll(), new HttpHeaders(), HttpStatus.OK);
-        return entity;
+        return new ResponseEntity<>(pollService.getAllPoll(), new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{findPagination}", produces = { "application/hal+json" }, params = { "page", "size" })
@@ -37,13 +38,12 @@ public class PollController {
         if (page > resultPage.getTotalPages()) {
             throw new MyResourceNotFoundException();
         }
-        ResponseEntity<List<Poll>> entity = new ResponseEntity<>(resultPage.toList(), new HttpHeaders(), HttpStatus.OK);
-        return entity;
+        return   new ResponseEntity<>(resultPage.toList(), new HttpHeaders(), HttpStatus.OK);
     }
 
+
     @GetMapping(value = "/{id}" , produces = { "application/hal+json" })
-    public ResponseEntity<Poll> getEmployeeById(@PathVariable("id") Long id)
-            throws RecordNotFoundException {
+    public ResponseEntity<Poll> getEmployeeById(@PathVariable("id") Long id) {
         Poll entity = pollService.getPollById(id);
         return new ResponseEntity<>(entity, new HttpHeaders(), HttpStatus.OK);
     }
@@ -55,8 +55,7 @@ public class PollController {
     }
 
     @PostMapping(value="/create",headers="Accept=application/json")
-    public ResponseEntity<Poll> create(@RequestBody Poll poll)
-            throws RecordNotFoundException {
+    public ResponseEntity<Poll> create(@RequestBody Poll poll) {
         Poll updated = pollService.createOrUpdateEmployee(poll);
         return new ResponseEntity<>(updated, new HttpHeaders(), HttpStatus.OK);
     }

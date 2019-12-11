@@ -18,15 +18,14 @@ import java.util.Optional;
 public class PollService {
 
     @Autowired
-    PollRepository pollRepository;
+    private PollRepository pollRepository;
 
     public PollService(PollRepository pollRepository) {
         this.pollRepository = pollRepository;
     }
 
     public List<Poll> getAllPoll() {
-        final List<Poll> all = pollRepository.findAll();
-        return all;
+        return  pollRepository.findAll();
     }
 
     public Poll getPollById(long id) {
@@ -63,4 +62,5 @@ public class PollService {
         Pageable pageable =  new QPageRequest(page,size);
         return pollRepository.findAll(pageable);
     }
+
 }
