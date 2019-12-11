@@ -2,19 +2,20 @@ package com.example.test.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
 
 
 @Entity
 @Table(name = "poll")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Poll  implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator( name = "seqPoll", sequenceName = "seqPoll", allocationSize = 1, initialValue = 1 )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "seqPoll")
     @Column(name = "id")
     private long id;
     @Column(name = "namePoll", unique = true, nullable = false)
@@ -25,19 +26,24 @@ public class Poll  implements Serializable {
     private Date stopDate;
     @Column(name = "isActive")
     private boolean isActive;
-    @OneToMany(mappedBy = "poll")
+    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<PollQuestion> pollQuestions;
 
     public Poll() {
     }
 
-    public Poll(String name, Date startDate, Date stopDate, boolean isActive, List<PollQuestion> pollQuestions) {
+    public Poll(Long id, String name, Date startDate, Date stopDate, boolean isActive, List<PollQuestion> pollQuestions) {
         this.name = name;
         this.startDate = startDate;
         this.stopDate = stopDate;
         this.isActive = isActive;
         this.pollQuestions = pollQuestions;
+        this.id = id;
     }
+
+
 
     public long getId() {
         return id;
@@ -86,4 +92,5 @@ public class Poll  implements Serializable {
     public void setPollQuestions(List<PollQuestion> pollQuestions) {
         this.pollQuestions = pollQuestions;
     }
+
 }
